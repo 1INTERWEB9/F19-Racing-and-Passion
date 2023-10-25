@@ -1,3 +1,5 @@
+const { createImage } = require("../controllerImage/controllerImage");
+
 const saveImageInDB = async ({ jsonInfo, Driver, Image }) => {
   let errors = [];
   for (const register of jsonInfo.drivers) {
@@ -5,12 +7,7 @@ const saveImageInDB = async ({ jsonInfo, Driver, Image }) => {
       let driverFilter = await Driver.findOne({
         where: { urlDriver: register?.url },
       });
-
-      await Image.create({
-        urlImage: register?.image?.url,
-        imageBy: register?.image?.imageby,
-        driver: driverFilter?.id_Driver,
-      });
+      await createImage({ Image, register, driverFilter });
     } catch (error) {
       errors.push(error.message);
     }
