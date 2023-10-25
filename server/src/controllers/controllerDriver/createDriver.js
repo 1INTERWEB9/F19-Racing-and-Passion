@@ -6,9 +6,6 @@ const createDriver = async ({ Driver, register }) => {
   if (Number.isInteger(register?.number)) numberDriver = register?.number;
   if (register?.description?.length > 10 && register?.description)
     descriptionDriver = register?.description;
-
-  if (register?.name?.forename === "Jean-Denis")
-    console.log(register, numberDriver, codeDriver, descriptionDriver);
   await Driver.findOrCreate({
     where: {
       referenceDriver: register?.driverRef,
