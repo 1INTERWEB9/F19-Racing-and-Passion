@@ -49,11 +49,5 @@ module.exports = (sequelize) => {
     },
   });
 
-  Driver.beforeValidate(async (driver, options) => {
-    if (!Number.isInteger(driver.numberDriver)) driver.numberDriver = null;
-    if (driver.codeDriver == "\\N") driver.codeDriver = null;
-    if (driver.descriptionDriver?.length < 10) driver.descriptionDriver = null;
-  });
-
   return Driver;
 };
