@@ -8,10 +8,10 @@ const createImage = async ({ Image, register, driverFilter }) => {
     where: {
       urlImage: urlImage,
       imageBy: imageBy,
-      driver: driverFilter?.id_Driver,
+      driver: driverFilter?.id,
     },
   });
-  image.setDriver(driverFilter?.id_Driver);
+  image.setDriver(driverFilter?.id);
 };
 
 module.exports = {

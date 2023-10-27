@@ -2,24 +2,24 @@ const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
   const Driver = sequelize.define("Driver", {
-    id_Driver: {
+    id: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    referenceDriver: {
+    driverRef: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    foreNameDriver: {
+    forename: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    surNameDriver: {
+    surname: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    numberDriver: {
+    number: {
       type: DataTypes.INTEGER,
       allowNull: true,
       validate: {
@@ -27,23 +27,23 @@ module.exports = (sequelize) => {
       },
       valueDefault: null,
     },
-    codeDriver: {
+    code: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    dateOfBornDriver: {
+    dob: {
       type: DataTypes.DATEONLY,
       allowNull: false,
     },
-    nationalityDriver: {
+    nationality: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    urlDriver: {
+    url: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    descriptionDriver: {
+    description: {
       type: DataTypes.TEXT(3000),
       allowNull: true,
     },

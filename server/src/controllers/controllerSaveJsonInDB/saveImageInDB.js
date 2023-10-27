@@ -5,7 +5,7 @@ const saveImageInDB = async ({ jsonInfo, Driver, Image }) => {
   for (const register of jsonInfo) {
     try {
       let driverFilter = await Driver.findOne({
-        where: { urlDriver: register?.url },
+        where: { url: register?.url },
       });
       await createImage({ Image, register, driverFilter });
     } catch (error) {

@@ -8,15 +8,15 @@ const createDriver = async ({ Driver, register }) => {
     descriptionDriver = register?.description;
   await Driver.findOrCreate({
     where: {
-      referenceDriver: register?.driverRef,
-      foreNameDriver: register?.name?.forename,
-      surNameDriver: register?.name?.surname,
-      numberDriver: numberDriver,
-      codeDriver: codeDriver,
-      dateOfBornDriver: register?.dob,
-      nationalityDriver: register?.nationality,
-      urlDriver: register?.url,
-      descriptionDriver: descriptionDriver,
+      driverRef: register?.driverRef,
+      forename: register?.name?.forename,
+      surname: register?.name?.surname,
+      number: numberDriver,
+      code: codeDriver,
+      dob: register?.dob,
+      nationality: register?.nationality,
+      url: register?.url,
+      description: descriptionDriver,
     },
   });
 };

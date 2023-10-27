@@ -1,10 +1,10 @@
 const saveDriverTeamInDB = async ({ jsonInfo, Driver, Team }) => {
   let errors = [];
-  for (const register of jsonInfo.drivers) {
+  for (const register of jsonInfo) {
     try {
       if (register?.teams) {
         let driverFilter = await Driver.findOne({
-          where: { urlDriver: register?.url },
+          where: { url: register?.url },
         });
         let teams = register?.teams.replace(/ /g, "").split(",");
         for (let index = 0; index < teams.length; index++) {

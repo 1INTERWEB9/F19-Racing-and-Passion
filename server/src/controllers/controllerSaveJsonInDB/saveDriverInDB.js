@@ -2,7 +2,7 @@ const { createDriver } = require("../controllerDriver/createDriver");
 
 const saveDriverInDB = async ({ jsonInfo, Driver }) => {
   let errors = [];
-  for (const register of jsonInfo.drivers) {
+  for (const register of jsonInfo) {
     try {
       await createDriver({ Driver, register });
     } catch (error) {
