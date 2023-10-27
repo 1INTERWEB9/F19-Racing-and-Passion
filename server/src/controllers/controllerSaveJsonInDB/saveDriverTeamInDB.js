@@ -8,7 +8,7 @@ const saveDriverTeamInDB = async ({ jsonInfo, Driver, Team }) => {
         });
         let teams = register?.teams.replace(/ /g, "").split(",");
         for (let index = 0; index < teams.length; index++) {
-          let teamsFilter = await Team.findAll({
+          let teamsFilter = await Team.findOne({
             where: {
               nameTeam: teams[index],
             },

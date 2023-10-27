@@ -1,6 +1,6 @@
 const saveTeamInDB = async ({ jsonInfo, Team }) => {
   let errors = [];
-  for (const register of jsonInfo.drivers) {
+  for (const register of jsonInfo) {
     try {
       if (register?.teams) {
         let teamsFiltered = register?.teams.replace(/ /g, "").split(",");
