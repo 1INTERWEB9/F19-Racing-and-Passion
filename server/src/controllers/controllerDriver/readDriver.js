@@ -14,9 +14,23 @@ const readDriver = async ({ condition }) => {
       if (condition[key] >= 1) pageSize = condition[key];
     }
   }
-  const [results, count] = await queryApi({ filters, page, pageSize });
+  const [resultsApi, countApi, pageApi] = await queryApi({
+    filters,
+    page,
+    pageSize,
+  });
+  const [resultDB, countDB] = await queryDB({
+    filters,
+    page,
+    pageSize,
+    pageApi,
+    countApi,
+    resultsApi,
+  });
+  const count = countApi + countDB;
+  let results = resultsApi;
+  if (resultsApi.length < pageSize) results = resultsApi.concat(resultDB);
   if (results.length < 1) throw new Error("Filtro invalido");
-  // return queryDB({ filters, page, pageSize });
   const information = {
     count: count,
     pages: Math.ceil(count / pageSize),
@@ -39,19 +53,32 @@ const queryApi = async ({ filters, page, pageSize }) => {
 
     if (validation === Object.keys(filters).length) return driverFilter;
   });
-  const results = driversFiltered.slice(
+  const resultsApi = driversFiltered.slice(
     page * pageSize,
     page * pageSize + pageSize
   );
-  const count = driversFiltered.length;
-  return [results, count];
+  const countApi = driversFiltered.length;
+  const pageApi = Math.ceil(countApi / pageSize);
+  return [resultsApi, countApi, pageApi];
 };
 
-const queryDB = async ({ filters, page, pageSize }) => {
-  let { count, rows } = await Driver.findAndCountAll({
+const queryDB = async ({
+  filters,
+  page,
+  pageSize,
+  pageApi,
+  countApi,
+  resultsApi,
+}) => {
+  let pageDB = page + 1 - pageApi;
+  let skipDriver = page * 9 - countApi;
+
+  if (skipDriver < 1) skipDriver = 0;
+  if (pageDB < 1) pageDB = 0;
+  let { rows } = await Driver.findAndCountAll({
     where: filters,
-    offset: page * pageSize,
-    limit: pageSize,
+    offset: skipDriver,
+    limit: pageSize - resultsApi.length,
     include: [
       {
         model: Image,
@@ -64,14 +91,12 @@ const queryDB = async ({ filters, page, pageSize }) => {
     ],
     attributes: { exclude: ["createdAt", "updatedAt"] },
   });
-  console.log(count);
-  return rows;
-};
-
-const createInfo = () => {
-  // let info={
-  //   page:
-  // }
+  let count = await Driver.count({
+    where: filters,
+  });
+  const resultsDB = rows;
+  const countDB = count;
+  return [resultsDB, countDB];
 };
 
 module.exports = {
