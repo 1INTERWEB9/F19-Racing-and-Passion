@@ -2,7 +2,7 @@ const createDriver = async ({ Driver, register }) => {
   let codeDriver = null;
   let numberDriver = null;
   let descriptionDriver = null;
-  if (Number.isInteger(register?.code)) codeDriver = register?.code;
+  if (register?.code != "\\N") codeDriver = register?.code;
   if (Number.isInteger(register?.number)) numberDriver = register?.number;
   if (register?.description?.length > 10 && register?.description)
     descriptionDriver = register?.description;
