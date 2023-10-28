@@ -44,7 +44,23 @@ const objectFilterAPI = ({ driverFilter, key, filters }) => {
   return validation;
 };
 
-const formatFiltersDB = ({ filters }) => {};
+const formatFiltersDB = ({ filters }) => {
+  let driverFilter = {};
+  let imageFilter = "%%";
+  let teamsFilter = "%%";
+  for (const key in filters) {
+    if (key.toLowerCase() != "image" && key.toLowerCase() != "teams")
+      driverFilter[key.toLowerCase()] = filters[key.toLowerCase()];
+    else if (key.toLowerCase() == "image") {
+      if (filters[key].length >= 1)
+        imageFilter = "%" + filters[key.toLowerCase()] + "%";
+    } else {
+      if (filters[key].length >= 1)
+        teamsFilter = "%" + filters[key.toLowerCase()] + "%";
+    }
+  }
+  return [driverFilter, imageFilter, teamsFilter];
+};
 
 module.exports = {
   formatFiltersAPI,
