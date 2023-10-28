@@ -1,14 +1,17 @@
+const { Op } = require("sequelize");
 const axios = require("axios");
 const { Driver, Team, Image, DriverTeams } = require("../../db");
 const { formatApi } = require("./formatApi");
+const { formatFiltersAPI, formatFiltersDB } = require("./formatFilters");
 
 const readDriver = async ({ condition }) => {
   let filters = {};
   let page = 0;
   let pageSize = 9;
   for (const key in condition) {
-    if (key != "page" && key != "pageSize") filters[key] = condition[key];
-    else if (key == "page") {
+    if (key.toLowerCase() != "page" && key.toLowerCase() != "pageSize")
+      filters[key] = condition[key];
+    else if (key.toLowerCase() == "page") {
       if (condition[key] >= 1) page = condition[key] - 1;
     } else {
       if (condition[key] >= 1) pageSize = condition[key];
@@ -45,21 +48,14 @@ const queryApi = async ({ filters, page, pageSize }) => {
     let driverFormat = await formatApi({ register, Team });
     drivers.push(driverFormat);
   }
-  const driversFiltered = drivers.filter((driverFilter) => {
-    let validation = 0;
-    for (const key in filters) {
-      if (driverFilter[key] == filters[key]) validation++;
-    }
-
-    if (validation === Object.keys(filters).length) return driverFilter;
-  });
+  const driversFiltered = formatFiltersAPI({ drivers, filters });
   const resultsApi = driversFiltered.slice(
     page * pageSize,
     page * pageSize + pageSize
   );
   const countApi = driversFiltered.length;
   const pageApi = Math.ceil(countApi / pageSize);
-  return [resultsApi, countApi, pageApi];
+  return [resultsApi, countApi, pageApi, drivers];
 };
 
 const queryDB = async ({
@@ -72,28 +68,47 @@ const queryDB = async ({
 }) => {
   let pageDB = page + 1 - pageApi;
   let skipDriver = page * 9 - countApi;
-
+  const [driverFilter, imageFilter, teamsFilter] = formatFiltersDB({ filters });
   if (skipDriver < 1) skipDriver = 0;
   if (pageDB < 1) pageDB = 0;
-  let { rows } = await Driver.findAndCountAll({
-    where: filters,
+  let { rows, count } = await Driver.findAndCountAll({
+    where: driverFilter,
     offset: skipDriver,
     limit: pageSize - resultsApi.length,
     include: [
       {
         model: Image,
         attributes: ["id_image", "urlImage", "imageBy"],
+        where: {
+          [Op.or]: [
+            {
+              urlImage: {
+                [Op.iLike]: imageFilter,
+              },
+            },
+            {
+              imageBy: {
+                [Op.iLike]: imageFilter,
+              },
+            },
+          ],
+        },
       },
       {
         model: Team,
         attributes: ["id_Team", "nameTeam"],
+        where: {
+          nameTeam: {
+            [Op.iLike]: teamsFilter,
+          },
+        },
       },
     ],
     attributes: { exclude: ["createdAt", "updatedAt"] },
   });
-  let count = await Driver.count({
-    where: filters,
-  });
+  // let count = await Driver.count({
+  //   where: filters,
+  // });
   const resultsDB = rows;
   const countDB = count;
   return [resultsDB, countDB];
