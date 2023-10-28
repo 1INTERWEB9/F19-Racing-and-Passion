@@ -14,9 +14,9 @@ const saveJsonInDB = async () => {
   try {
     const jsonInfo = await createjsonInfo();
     await saveTeamInDB({ jsonInfo, Team });
-    // await saveDriverInDB({ jsonInfo, Driver });
-    //await saveImageInDB({ jsonInfo, Driver, Image });
-    // await saveDriverTeamInDB({ jsonInfo, Driver, Team });
+    await saveDriverInDB({ jsonInfo, Driver });
+    await saveImageInDB({ jsonInfo, Driver, Image });
+    await saveDriverTeamInDB({ jsonInfo, Driver, Team });
   } catch (error) {
     throw new Error(error);
   }
