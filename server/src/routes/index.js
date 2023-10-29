@@ -5,5 +5,5 @@ const router = Router();
 
 router.get("/DataBase", handlerSaveJsonInDB);
 router.get("/Drivers", handlerReadDriver);
-
+router.get("/Drivers/:id", handlerReadDriver);
 module.exports = router;
