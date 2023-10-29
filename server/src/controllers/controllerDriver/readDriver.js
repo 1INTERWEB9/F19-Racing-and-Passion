@@ -1,10 +1,10 @@
 const { Op } = require("sequelize");
 const axios = require("axios");
-const { Driver, Team, Image, DriverTeams } = require("../../db");
+const { Driver, Team, Image } = require("../../db");
 const { formatApi } = require("./formatApi");
 const { formatFiltersAPI, formatFiltersDB } = require("./formatFilters");
 
-const readDriver = async ({ condition }) => {
+const readDriver = async ({ condition, id }) => {
   let filters = {};
   let page = 0;
   let pageSize = 9;
@@ -21,7 +21,12 @@ const readDriver = async ({ condition }) => {
     filters,
     page,
     pageSize,
+    id,
   });
+  if (id) {
+    if (resultsApi.length > 0) id = "00000000-0000-0000-0000-000000000000";
+  }
+
   const [resultDB, countDB] = await queryDB({
     filters,
     page,
@@ -29,26 +34,31 @@ const readDriver = async ({ condition }) => {
     pageApi,
     countApi,
     resultsApi,
+    id,
   });
   const count = countApi + countDB;
   let results = resultsApi;
   if (resultsApi.length < pageSize) results = resultsApi.concat(resultDB);
   if (results.length < 1) throw new Error("Filtro invalido");
-  const information = {
-    count: count,
-    pages: Math.ceil(count / pageSize),
-  };
-  return { information, data: results };
+  if (results.length > 1) {
+    const information = {
+      count: count,
+      pages: Math.ceil(count / pageSize),
+    };
+    return { information, data: results };
+  } else {
+    return results;
+  }
 };
 
-const queryApi = async ({ filters, page, pageSize }) => {
+const queryApi = async ({ filters, page, pageSize, id }) => {
   const { data } = await axios.get(`http://localhost:5000/drivers`);
   let drivers = [];
   for (const register of data) {
     let driverFormat = await formatApi({ register, Team });
     drivers.push(driverFormat);
   }
-  const driversFiltered = formatFiltersAPI({ drivers, filters });
+  const driversFiltered = formatFiltersAPI({ drivers, filters, id });
   const resultsApi = driversFiltered.slice(
     page * pageSize,
     page * pageSize + pageSize
@@ -65,14 +75,39 @@ const queryDB = async ({
   pageApi,
   countApi,
   resultsApi,
+  id,
 }) => {
   let pageDB = page + 1 - pageApi;
   let skipDriver = page * 9 - countApi;
   const [driverFilter, imageFilter, teamsFilter] = formatFiltersDB({ filters });
   if (skipDriver < 1) skipDriver = 0;
   if (pageDB < 1) pageDB = 0;
+  console.log(id);
   let { rows, count } = await Driver.findAndCountAll({
-    where: driverFilter,
+    where: {
+      id: id ? id : { [Op.ne]: null },
+      [Op.or]: [
+        {
+          forename: {
+            [Op.iLike]: driverFilter.name,
+          },
+        },
+        {
+          surname: {
+            [Op.iLike]: driverFilter.name,
+          },
+        },
+      ],
+      dob: driverFilter.dob ? driverFilter.dob : { [Op.ne]: null },
+      driverRef: driverFilter.driverRef
+        ? driverFilter.driverRef
+        : { [Op.ne]: null },
+      ...(driverFilter.code ? { code: driverFilter.code } : {}),
+      nationality: driverFilter.nationality
+        ? driverFilter.nationality
+        : { [Op.ne]: null },
+      ...(driverFilter.number ? { number: driverFilter.number } : {}),
+    },
     offset: skipDriver,
     limit: pageSize - resultsApi.length,
     include: [
@@ -80,18 +115,9 @@ const queryDB = async ({
         model: Image,
         attributes: ["id_image", "urlImage", "imageBy"],
         where: {
-          [Op.or]: [
-            {
-              urlImage: {
-                [Op.iLike]: imageFilter,
-              },
-            },
-            {
-              imageBy: {
-                [Op.iLike]: imageFilter,
-              },
-            },
-          ],
+          imageBy: {
+            [Op.iLike]: imageFilter,
+          },
         },
       },
       {
@@ -106,9 +132,35 @@ const queryDB = async ({
     ],
     attributes: { exclude: ["createdAt", "updatedAt"] },
   });
-  // let count = await Driver.count({
-  //   where: filters,
-  // });
+  if (imageFilter == "%%" || teamsFilter == "%%") {
+    count = await Driver.count({
+      where: {
+        id: id ? id : { [Op.ne]: null },
+        [Op.or]: [
+          {
+            forename: {
+              [Op.iLike]: driverFilter.name,
+            },
+          },
+          {
+            surname: {
+              [Op.iLike]: driverFilter.name,
+            },
+          },
+        ],
+        dob: driverFilter.dob ? driverFilter.dob : { [Op.ne]: null },
+        driverRef: driverFilter.driverRef
+          ? driverFilter.driverRef
+          : { [Op.ne]: null },
+        ...(driverFilter.code ? { code: driverFilter.code } : {}),
+        nationality: driverFilter.nationality
+          ? driverFilter.nationality
+          : { [Op.ne]: null },
+        ...(driverFilter.number ? { number: driverFilter.number } : {}),
+      },
+    });
+  }
+
   const resultsDB = rows;
   const countDB = count;
   return [resultsDB, countDB];
