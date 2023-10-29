@@ -1,23 +1,27 @@
 const { Op } = require("sequelize");
 
-const formatFiltersAPI = ({ drivers, filters }) => {
+const formatFiltersAPI = ({ drivers, filters, id }) => {
   const driversFiltered = drivers.filter((driverFilter) => {
     let validation = 0;
-    for (const key in filters) {
-      if (Array.isArray(driverFilter[key])) {
-        for (let index = 0; index < driverFilter[key].length; index++) {
-          let auxDriverFilter = driverFilter[key];
-          driverFilter[key] = driverFilter[key][index];
+    if (id) {
+      if (driverFilter.id == id) return driverFilter;
+    } else {
+      for (const key in filters) {
+        if (Array.isArray(driverFilter[key])) {
+          for (let index = 0; index < driverFilter[key].length; index++) {
+            let auxDriverFilter = driverFilter[key];
+            driverFilter[key] = driverFilter[key][index];
+            validation =
+              validation + objectFilterAPI({ driverFilter, key, filters });
+            driverFilter[key] = auxDriverFilter;
+          }
+        } else {
           validation =
             validation + objectFilterAPI({ driverFilter, key, filters });
-          driverFilter[key] = auxDriverFilter;
         }
-      } else {
-        validation =
-          validation + objectFilterAPI({ driverFilter, key, filters });
       }
+      if (validation === Object.keys(filters).length) return driverFilter;
     }
-    if (validation === Object.keys(filters).length) return driverFilter;
   });
   return driversFiltered;
 };
@@ -45,13 +49,23 @@ const objectFilterAPI = ({ driverFilter, key, filters }) => {
 };
 
 const formatFiltersDB = ({ filters }) => {
-  let driverFilter = {};
+  let driverFilter = {
+    name: "%%",
+  };
   let imageFilter = "%%";
   let teamsFilter = "%%";
   for (const key in filters) {
-    if (key.toLowerCase() != "image" && key.toLowerCase() != "teams")
+    if (
+      key.toLowerCase() != "image" &&
+      key.toLowerCase() != "teams" &&
+      key.toLowerCase() != "name"
+    ) {
       driverFilter[key.toLowerCase()] = filters[key.toLowerCase()];
-    else if (key.toLowerCase() == "image") {
+    } else if (key.toLowerCase() == "name") {
+      if (filters[key].length >= 1)
+        driverFilter[key.toLowerCase()] =
+          "%" + filters[key.toLowerCase()] + "%";
+    } else if (key.toLowerCase() == "image") {
       if (filters[key].length >= 1)
         imageFilter = "%" + filters[key.toLowerCase()] + "%";
     } else {
