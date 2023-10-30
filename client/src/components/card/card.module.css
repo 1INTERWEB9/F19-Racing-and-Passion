@@ -1,0 +1,54 @@
+#Fav {
+  color: var(--main-color);
+  font-size: xx-large;
+  border-style: none;
+  padding: 0px;
+  box-shadow: none;
+  background: none;
+}
+#Fav:hover {
+  animation: glow 1s forwards;
+}
+
+.img {
+  box-shadow: 0px 0px 5px black;
+  padding: 0px;
+}
+.img:hover {
+  animation: glowImg 1s forwards;
+}
+
+.div_card {
+  background: rgb(35, 59, 63);
+  border-radius: 15px;
+  margin: 10px;
+  min-width: 300px;
+  max-width: 300px;
+  min-height: 340px;
+  box-shadow: 0px 0px 5px #d0f181;
+}
+
+.name {
+  text-shadow: 1px 0px 2px rgb(255, 251, 44);
+}
+.name:hover {
+  animation: glowName 1s forwards;
+}
+
+@keyframes glow {
+  100% {
+    text-shadow: 0px 0px 20px var(--second-color);
+  }
+}
+
+@keyframes glowImg {
+  100% {
+    box-shadow: 0px 0px 20px white;
+  }
+}
+
+@keyframes glowName {
+  100% {
+    text-shadow: 0px 0px 20px rgb(255, 251, 44);
+  }
+}
