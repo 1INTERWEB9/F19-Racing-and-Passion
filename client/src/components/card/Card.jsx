@@ -1,8 +1,13 @@
+/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
 import css from "./card.module.css";
 import { useState, useEffect, memo } from "react";
 // import { AddCardFav, DeleteCardFav } from "../../redux/actions";
 import { useSelector, useDispatch } from "react-redux";
+import {
+  LazyLoadImage,
+  trackWindowScroll,
+} from "react-lazy-load-image-component";
 import { Link } from "react-router-dom";
 
 const Card = memo(function Card({ props, favCards }) {
@@ -45,30 +50,24 @@ const Card = memo(function Card({ props, favCards }) {
           {props?.name?.forename ? props.name?.forename : props?.forename}{" "}
           {props?.name?.surname ? props.name?.surname : props?.surname}
         </h2>
-        <div style={{ maxWidth: "200px" }}>
-          <Link to={`/driver/${props.id}`}>
-            <img
-              className={css.img}
-              style={{
-                display: "flex",
-                marginLeft: "auto",
-                marginRight: "auto",
-                marginBottom: 10,
-                maxHeight: "300px",
-                maxWidth: "auto",
-              }}
-              src={
-                props?.image?.urlImage
-                  ? props?.image?.urlImage
-                  : props?.Images[0]?.urlImage
-              }
-              alt={props.driverRef}
-            />
-          </Link>
-        </div>
+
+        <Link to={`/driver/${props.id}`} state={{ render: true }}>
+          <LazyLoadImage
+            alt={props.driverRef}
+            effect="blur"
+            style={{ marginBottom: 15 }}
+            height={300}
+            width={300}
+            src={
+              props?.image?.urlImage
+                ? props?.image?.urlImage
+                : props?.Images[0]?.urlImage
+            }
+          />
+        </Link>
       </div>
     </>
   );
 });
 
-export default Card;
+export default trackWindowScroll(Card);

@@ -1,6 +1,8 @@
-import { useParams } from "react-router-dom";
+/* eslint-disable react/prop-types */
+import { useLocation, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 import { GetSingleDriver } from "../../redux/actions";
 import css from "./detailCard.module.css";
 
@@ -10,6 +12,7 @@ const DetailCard = () => {
     "--color-state": "inherit",
   });
   const driver = useSelector((state) => state.singleDriver);
+  let { state } = useLocation();
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(GetSingleDriver(id));
@@ -21,25 +24,44 @@ const DetailCard = () => {
       "--color-state": color,
     });
   };
-
   return (
     <>
-      <div className={css.div_custom}>
+      <div className={css.div_custom} hidden={state?.render}>
         <h1 style={color} className={css.div_tittle}>
           {driver?.name?.forename ? driver?.name?.forename : driver?.forename}{" "}
           {driver?.name?.surname ? driver?.name?.surname : driver?.surname}
         </h1>
-        <p style={color}>Dale click a cualquier color de la imagen</p>
-        {/* <div style={{ display: "flex" }}>
-          <div className={css.img} style={{ display: "flex" }}></div>
+        <div style={{ display: "flex" }}>
+          <div className={css.img} style={{ display: "flex" }}>
+            <LazyLoadImage
+              className={css.img}
+              style={{
+                display: "flex",
+                marginLeft: "auto",
+                marginRight: "auto",
+                marginBottom: 10,
+                maxHeight: "auto",
+                maxWidth: "300px",
+              }}
+              src={
+                driver?.image?.urlImage
+                  ? driver?.image?.urlImage
+                  : driver?.Images?.urlImage
+              }
+              alt={driver.driverRef}
+              effect="blur"
+            />
+          </div>
           <div style={{ marginLeft: 5 }}>
-            <h2 style={color}>{driver.status}</h2>
+            {/* {driver?.teams.map((team) => (
+              <h2 key={team?.id_Team}>{team?.nameTeam}</h2>
+            ))} */}
+
             <h2 className={css.paragraph} style={color}>
-              Su origen radica en {driver?.origin?.name} y se encuentra
-              localizado en {driver?.location?.name}
+              x
             </h2>
           </div>
-        </div> */}
+        </div>
       </div>
     </>
   );
