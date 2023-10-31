@@ -46,7 +46,7 @@ const Card = memo(function Card({ props, favCards }) {
           {props?.name?.surname ? props.name?.surname : props?.surname}
         </h2>
         <div style={{ maxWidth: "200px" }}>
-          <Link to={`/character/${props.id}`}>
+          <Link to={`/driver/${props.id}`}>
             <img
               className={css.img}
               style={{

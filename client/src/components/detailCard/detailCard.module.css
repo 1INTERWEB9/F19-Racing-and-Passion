@@ -1,0 +1,42 @@
+.div_tittle {
+  border-style: solid;
+  border-color: black;
+  border-radius: 15px;
+  width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  color: var(--color-state);
+}
+
+.div_custom {
+  margin-top: 30px;
+  margin-right: auto;
+  margin-left: auto;
+  min-width: 820px;
+  max-width: 820px;
+  background: rgb(35, 59, 63);
+  box-shadow: 0px 0px 5px #d0f181;
+  border-radius: 15px;
+  line-height: 20px;
+}
+
+.img {
+  margin-left: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+p {
+  color: var(--color-state);
+}
+
+h2 {
+  color: var(--color-state);
+}
+
+.paragraph {
+  font-size: xx-large;
+  line-height: 40px;
+  margin-right: 15px;
+  color: var(--color-state);
+}
