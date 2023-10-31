@@ -3,6 +3,7 @@ import {
   ERROR_GET_DRIVERS,
   CLEAN_DRIVERS,
   GET_SINGLE_DRIVER,
+  DISABLED_PAGE_BUTTONS,
 } from "./action_types";
 import axios from "axios";
 
@@ -15,7 +16,7 @@ export const GetDrivers = (pageAPI, condition) => {
       .catch(() => {
         return dispatch({
           type: ERROR_GET_DRIVERS,
-          payload: { results: [], info: [] },
+          payload: { data: [], information: [] },
         });
       });
   };
@@ -34,8 +35,12 @@ export const GetSingleDriver = (id) => {
       .catch(() => {
         return dispatch({
           type: ERROR_GET_DRIVERS,
-          payload: { results: [], info: [] },
+          payload: { data: [], information: [] },
         });
       });
   };
+};
+
+export const DisabledPageButtons = () => {
+  return { type: DISABLED_PAGE_BUTTONS };
 };

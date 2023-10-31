@@ -4,6 +4,7 @@ import {
   ERROR_GET_DRIVERS,
   CLEAN_DRIVERS,
   GET_SINGLE_DRIVER,
+  DISABLED_PAGE_BUTTONS,
 } from "./action_types";
 
 const initialState = {
@@ -11,6 +12,8 @@ const initialState = {
   drivers: [],
   singleDriver: [],
   infoAPI: [],
+  disabledButton: true,
+  error: false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -18,14 +21,16 @@ const reducer = (state = initialState, action) => {
     case GET_DRIVERS:
       return {
         ...state,
-        allDrivers: action.payload.data,
         drivers: action.payload.data,
         infoAPI: action.payload.information,
+        disabledButton: false,
+        error: false,
       };
     case ERROR_GET_DRIVERS:
       return {
         ...state,
-        drivers: action.payload.results,
+        drivers: action.payload.data,
+        error: true,
       };
     case CLEAN_DRIVERS:
       return {
@@ -39,6 +44,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         singleDriver: action.payload[0],
+      };
+    case DISABLED_PAGE_BUTTONS:
+      return {
+        ...state,
+        disabledButton: true,
       };
     default:
       return { ...state };
