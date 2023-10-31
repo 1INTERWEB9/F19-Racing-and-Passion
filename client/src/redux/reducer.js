@@ -38,7 +38,7 @@ const reducer = (state = initialState, action) => {
     case GET_SINGLE_DRIVER:
       return {
         ...state,
-        singleDriver: action.payload,
+        singleDriver: action.payload[0],
       };
     default:
       return { ...state };

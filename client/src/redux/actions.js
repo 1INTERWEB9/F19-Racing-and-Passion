@@ -25,7 +25,7 @@ export const CleanCharacters = () => {
   return { type: CLEAN_DRIVERS };
 };
 
-export const GetSingleCharacter = (id) => {
+export const GetSingleDriver = (id) => {
   return (dispatch) => {
     axios(`http://localhost:3001/drivers/${id}`)
       .then(({ data }) => {
