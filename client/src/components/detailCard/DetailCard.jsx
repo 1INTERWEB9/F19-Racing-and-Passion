@@ -12,7 +12,7 @@ const DetailCard = () => {
     "--color-state": "inherit",
   });
   const driver = useSelector((state) => state.singleDriver);
-  let { state } = useLocation();
+  const disabledButton = useSelector((state) => state.disabledButton);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(GetSingleDriver(id));
@@ -26,43 +26,47 @@ const DetailCard = () => {
   };
   return (
     <>
-      <div className={css.div_custom} hidden={state?.render}>
+      <div className={css.div_custom} hidden={disabledButton}>
         <h1 style={color} className={css.div_tittle}>
           {driver?.name?.forename ? driver?.name?.forename : driver?.forename}{" "}
           {driver?.name?.surname ? driver?.name?.surname : driver?.surname}
         </h1>
-        <div style={{ display: "flex" }}>
-          <div className={css.img} style={{ display: "flex" }}>
-            <LazyLoadImage
-              className={css.img}
-              style={{
-                display: "flex",
-                marginLeft: "auto",
-                marginRight: "auto",
-                marginBottom: 10,
-                maxHeight: "auto",
-                maxWidth: "300px",
-              }}
-              src={
-                driver?.image?.urlImage
-                  ? driver?.image?.urlImage
-                  : driver?.Images?.urlImage
-              }
-              alt={driver.driverRef}
-              effect="blur"
-            />
-          </div>
-          <div style={{ marginLeft: 5 }}>
-            {/* {driver?.teams.map((team) => (
-              <h2 key={team?.id_Team}>{team?.nameTeam}</h2>
-            ))} */}
 
-            <h2 className={css.paragraph} style={color}>
-              x
-            </h2>
+        <div className={css.img} style={{ display: "flex" }}>
+          <LazyLoadImage
+            className={css.img}
+            style={{
+              display: "flex",
+              marginLeft: "auto",
+              marginRight: "auto",
+              marginBottom: 10,
+              maxHeight: "auto",
+              maxWidth: "300px",
+            }}
+            src={
+              driver?.image?.urlImage
+                ? driver?.image?.urlImage
+                : driver?.Images?.urlImage
+            }
+            alt={driver.driverRef}
+            effect="blur"
+          />
+          <div style={{ marginLeft: 5, display: "flex", flexWrap: "wrap" }}>
+            {driver?.teams?.map((team) => (
+              <h2
+                key={team?.id_Team}
+                style={{ marginLeft: 15, marginRight: 15 }}
+              >
+                {team?.nameTeam}
+              </h2>
+            ))}
           </div>
         </div>
+        <div style={{}}>
+          <p>{driver?.description}</p>
+        </div>
       </div>
+      <h1 hidden={!disabledButton}>Cargando...</h1>
     </>
   );
 };

@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import css from "./card.module.css";
 import { useState, useEffect, memo } from "react";
-// import { AddCardFav, DeleteCardFav } from "../../redux/actions";
+import { DisabledPageButtons } from "../../redux/actions";
 import { useSelector, useDispatch } from "react-redux";
 import {
   LazyLoadImage,
@@ -51,20 +51,26 @@ const Card = memo(function Card({ props, favCards }) {
           {props?.name?.surname ? props.name?.surname : props?.surname}
         </h2>
 
-        <Link to={`/driver/${props.id}`} state={{ render: true }}>
-          <LazyLoadImage
-            alt={props.driverRef}
-            effect="blur"
-            style={{ marginBottom: 15 }}
-            height={300}
-            width={300}
-            src={
-              props?.image?.urlImage
-                ? props?.image?.urlImage
-                : props?.Images[0]?.urlImage
-            }
-          />
-        </Link>
+        <div
+          onClick={() => {
+            dispatch(DisabledPageButtons());
+          }}
+        >
+          <Link to={`/driver/${props.id}`}>
+            <LazyLoadImage
+              alt={props.driverRef}
+              effect="blur"
+              style={{ marginBottom: 15 }}
+              height={300}
+              width={300}
+              src={
+                props?.image?.urlImage
+                  ? props?.image?.urlImage
+                  : props?.Images[0]?.urlImage
+              }
+            />
+          </Link>
+        </div>
       </div>
     </>
   );
