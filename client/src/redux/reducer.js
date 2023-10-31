@@ -44,6 +44,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         singleDriver: action.payload[0],
+        disabledButton: false,
       };
     case DISABLED_PAGE_BUTTONS:
       return {
