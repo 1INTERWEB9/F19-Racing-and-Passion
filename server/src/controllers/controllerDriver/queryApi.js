@@ -13,7 +13,7 @@ const queryApi = async ({ filters, page, pageSize, id }) => {
   const driversFiltered = formatFiltersAPI({ drivers, filters, id });
   const resultsApi = driversFiltered.slice(
     page * pageSize,
-    page * pageSize + pageSize
+    page * pageSize + Number.parseInt(pageSize)
   );
   const countApi = driversFiltered.length;
   const pageApi = Math.ceil(countApi / pageSize);

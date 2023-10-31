@@ -6,7 +6,7 @@ const readDriver = async ({ condition, id }) => {
   let page = 0;
   let pageSize = 9;
   for (const key in condition) {
-    if (key.toLowerCase() != "page" && key.toLowerCase() != "pageSize")
+    if (key.toLowerCase() != "page" && key.toLowerCase() != "pagesize")
       filters[key] = condition[key];
     else if (key.toLowerCase() == "page") {
       if (condition[key] >= 1) page = condition[key] - 1;
