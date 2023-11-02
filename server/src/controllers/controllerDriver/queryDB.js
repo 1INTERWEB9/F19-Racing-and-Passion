@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { Driver, Team, Image } = require("../../db");
+const { Driver, Team, Image, Nationality } = require("../../db");
 const { formatFiltersDB } = require("./formatFilters");
 
 const queryDB = async ({
@@ -17,6 +17,17 @@ const queryDB = async ({
   if (skipDriver < 1) skipDriver = 0;
   if (pageDB < 1) pageDB = 0;
   let { rows, count } = await Driver.findAndCountAll({
+    attributes: [
+      "id",
+      "driverRef",
+      "number",
+      "code",
+      "forename",
+      "surname",
+      "dob",
+      "url",
+      "description",
+    ],
     where: {
       id: id ? id : { [Op.ne]: null },
       [Op.or]: [
@@ -36,14 +47,14 @@ const queryDB = async ({
         ? driverFilter.driverRef
         : { [Op.ne]: null },
       ...(driverFilter.code ? { code: driverFilter.code } : {}),
-      nationality: driverFilter.nationality
-        ? driverFilter.nationality
-        : { [Op.ne]: null },
       ...(driverFilter.number ? { number: driverFilter.number } : {}),
     },
     offset: skipDriver,
     limit: pageSize - resultsApi.length,
     include: [
+      {
+        model: Nationality,
+      },
       {
         model: Image,
         attributes: ["id_image", "urlImage", "imageBy"],
@@ -55,7 +66,6 @@ const queryDB = async ({
       },
       {
         model: Team,
-        attributes: ["id_Team", "nameTeam"],
         where: {
           nameTeam: {
             [Op.iLike]: teamsFilter,
@@ -63,7 +73,6 @@ const queryDB = async ({
         },
       },
     ],
-    attributes: { exclude: ["createdAt", "updatedAt"] },
   });
   if (imageFilter == "%%" || teamsFilter == "%%") {
     count = await Driver.count({
@@ -86,9 +95,6 @@ const queryDB = async ({
           ? driverFilter.driverRef
           : { [Op.ne]: null },
         ...(driverFilter.code ? { code: driverFilter.code } : {}),
-        nationality: driverFilter.nationality
-          ? driverFilter.nationality
-          : { [Op.ne]: null },
         ...(driverFilter.number ? { number: driverFilter.number } : {}),
       },
     });
