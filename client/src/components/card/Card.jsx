@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import css from "./card.module.css";
 import { useState, useEffect, memo } from "react";
-import { DisabledPageButtons } from "../../redux/actions";
+import { EnableWaitPage } from "../../redux/actions";
 import { useSelector, useDispatch } from "react-redux";
 import {
   LazyLoadImage,
@@ -28,24 +28,9 @@ const Card = memo(function Card({ props, favCards }) {
     });
   }, [isFav]);
 
-  // const handleButtonFav = () => {
-  //   if (!isFav && !favCards) {
-  //     dispatch(AddCardFav(props.id));
-  //     setIsFav(true);
-  //     setColor({ "--main-color": colorFav, "--second-color": colorNoFav });
-  //   } else {
-  //     dispatch(DeleteCardFav(props.id));
-  //     setIsFav(false);
-  //     setColor({ "--main-color": colorNoFav, "--second-color": colorFav });
-  //   }
-  // };
-
   return (
     <>
       <div className={css.div_card}>
-        {/* <button id={css.Fav} style={color} onClick={handleButtonFav}>
-          ❤
-        </button> */}
         <h2 className={css.name}>
           {props?.name?.forename ? props.name?.forename : props?.forename}{" "}
           {props?.name?.surname ? props.name?.surname : props?.surname}
@@ -53,7 +38,7 @@ const Card = memo(function Card({ props, favCards }) {
 
         <div
           onClick={() => {
-            dispatch(DisabledPageButtons());
+            dispatch(EnableWaitPage());
           }}
         >
           <Link to={`/driver/${props.id}`}>
@@ -66,7 +51,7 @@ const Card = memo(function Card({ props, favCards }) {
               src={
                 props?.image?.urlImage
                   ? props?.image?.urlImage
-                  : props?.Images[0]?.urlImage
+                  : props?.Image?.urlImage
               }
             />
           </Link>

@@ -12,7 +12,7 @@ const DetailCard = () => {
     "--color-state": "inherit",
   });
   const driver = useSelector((state) => state.singleDriver);
-  const disabledButton = useSelector((state) => state.disabledButton);
+  const waitPage = useSelector((state) => state.waitPage);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(GetSingleDriver(id));
@@ -26,7 +26,7 @@ const DetailCard = () => {
   };
   return (
     <>
-      <div className={css.div_custom} hidden={disabledButton}>
+      <div className={css.div_custom} hidden={waitPage}>
         <h1 style={color} className={css.div_tittle}>
           {driver?.name?.forename ? driver?.name?.forename : driver?.forename}{" "}
           {driver?.name?.surname ? driver?.name?.surname : driver?.surname}
@@ -66,7 +66,7 @@ const DetailCard = () => {
           <p>{driver?.description}</p>
         </div>
       </div>
-      <h1 hidden={!disabledButton}>Cargando...</h1>
+      <h1 hidden={!waitPage}>Cargando...</h1>
     </>
   );
 };

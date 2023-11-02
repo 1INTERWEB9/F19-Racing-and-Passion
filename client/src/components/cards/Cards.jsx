@@ -8,7 +8,7 @@ import CustomButton from "../customButton/CustomButton";
 import {
   GetDrivers,
   CleanCharacters,
-  DisabledPageButtons,
+  EnableWaitPage,
 } from "../../redux/actions";
 import { useState, useEffect, memo } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -16,7 +16,7 @@ import { useSelector, useDispatch } from "react-redux";
 const Cards = memo(function Cards() {
   const drivers = useSelector((state) => state.drivers);
   const infoAPI = useSelector((state) => state.infoAPI);
-  const disabledButton = useSelector((state) => state.disabledButton);
+  const waitPage = useSelector((state) => state.waitPage);
   const error = useSelector((state) => state.error);
   const dispatch = useDispatch();
   const [conditionSearch, setConditionSearch] = useState("");
@@ -34,7 +34,7 @@ const Cards = memo(function Cards() {
     } else {
       setcurrentDriversPage(2);
     }
-    dispatch(DisabledPageButtons());
+    dispatch(EnableWaitPage());
     dispatch(CleanCharacters());
   };
   const handleDecrementPageAPI = () => {
@@ -43,7 +43,7 @@ const Cards = memo(function Cards() {
     } else {
       setcurrentDriversPage(infoAPI.pages);
     }
-    dispatch(DisabledPageButtons());
+    dispatch(EnableWaitPage());
     dispatch(CleanCharacters());
   };
 
@@ -61,7 +61,7 @@ const Cards = memo(function Cards() {
           style={{ margin: 10 }}
           onClick={[handleDecrementPageAPI, handleIncrementPageAPI]}
           text={["Anterior página", "Siguiente Página"]}
-          disabled={disabledButton}
+          disabled={waitPage}
         />
       </div>
       <div
@@ -74,7 +74,7 @@ const Cards = memo(function Cards() {
       >
         {error ? (
           <h1>No se encuentran conductores que coincidan con la busqueda</h1>
-        ) : disabledButton ? (
+        ) : waitPage ? (
           <h1>Cargando...</h1>
         ) : null}
         {drivers.map((driver) => (

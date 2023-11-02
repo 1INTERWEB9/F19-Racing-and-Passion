@@ -2,11 +2,12 @@
 import css from "./apiSearchBar.module.css";
 import { useEffect, useState } from "react";
 //import CustomSelect from "../customSelect/CustomSelect";
-import { CleanCharacters, DisabledPageButtons } from "../../redux/actions";
-import { useDispatch } from "react-redux";
+import { CleanCharacters, EnableWaitPage } from "../../redux/actions";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function ApiSearchBar({ setConditionSearch }) {
   const dispatch = useDispatch();
+  const waitPage = useSelector((state) => state.waitPage);
   const [search, setSearch] = useState({
     value: "",
     type: "name",
@@ -17,7 +18,7 @@ export default function ApiSearchBar({ setConditionSearch }) {
   };
 
   const handleSearchCharacter = (event) => {
-    dispatch(DisabledPageButtons());
+    dispatch(EnableWaitPage());
     dispatch(CleanCharacters());
     setSearch({ ...search, value: event.target.value });
   };
@@ -45,6 +46,7 @@ export default function ApiSearchBar({ setConditionSearch }) {
         className={css.custom_input}
         value={search.value}
         onChange={handleSearchCharacter}
+        disabled={waitPage}
       />
     </nav>
   );

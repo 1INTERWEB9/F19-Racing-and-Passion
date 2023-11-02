@@ -4,7 +4,7 @@ import {
   ERROR_GET_DRIVERS,
   CLEAN_DRIVERS,
   GET_SINGLE_DRIVER,
-  DISABLED_PAGE_BUTTONS,
+  ENABLED_WAIT_PAGE,
 } from "./action_types";
 
 const initialState = {
@@ -12,7 +12,7 @@ const initialState = {
   drivers: [],
   singleDriver: [],
   infoAPI: [],
-  disabledButton: true,
+  waitPage: true,
   error: false,
 };
 
@@ -23,7 +23,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         drivers: action.payload.data,
         infoAPI: action.payload.information,
-        disabledButton: false,
+        waitPage: false,
         error: false,
       };
     case ERROR_GET_DRIVERS:
@@ -43,13 +43,13 @@ const reducer = (state = initialState, action) => {
     case GET_SINGLE_DRIVER:
       return {
         ...state,
-        singleDriver: action.payload[0],
-        disabledButton: false,
+        singleDriver: action.payload,
+        waitPage: false,
       };
-    case DISABLED_PAGE_BUTTONS:
+    case ENABLED_WAIT_PAGE:
       return {
         ...state,
-        disabledButton: true,
+        waitPage: true,
       };
     default:
       return { ...state };

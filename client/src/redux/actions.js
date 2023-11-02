@@ -3,7 +3,7 @@ import {
   ERROR_GET_DRIVERS,
   CLEAN_DRIVERS,
   GET_SINGLE_DRIVER,
-  DISABLED_PAGE_BUTTONS,
+  ENABLED_WAIT_PAGE,
 } from "./action_types";
 import axios from "axios";
 
@@ -41,6 +41,6 @@ export const GetSingleDriver = (id) => {
   };
 };
 
-export const DisabledPageButtons = () => {
-  return { type: DISABLED_PAGE_BUTTONS };
+export const EnableWaitPage = () => {
+  return { type: ENABLED_WAIT_PAGE };
 };
