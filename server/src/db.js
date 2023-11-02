@@ -33,15 +33,15 @@ let capsEntries = entries.map((entry) => [
 ]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-const { Driver, Image, Team, User, Favorite } = sequelize.models;
+const { Driver, Image, Team, User, Favorite, Nationality } = sequelize.models;
 
-Driver.hasMany(Image, {
+Driver.hasOne(Image, {
   foreignKey: {
     name: "driver",
   },
 });
 
-Image.belongsTo(Driver, {
+Image.hasOne(Driver, {
   foreignKey: {
     name: "driver",
   },
@@ -82,6 +82,18 @@ Driver.hasMany(Favorite, {
 Favorite.belongsTo(Driver, {
   foreignKey: {
     name: "driver",
+  },
+});
+
+Nationality.hasOne(Driver, {
+  foreignKey: {
+    name: "nationality",
+  },
+});
+
+Driver.belongsTo(Nationality, {
+  foreignKey: {
+    name: "nationality",
   },
 });
 

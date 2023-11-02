@@ -1,4 +1,4 @@
-const formatApi = async ({ register, Team }) => {
+const formatApi = async ({ register, Team, Nationality }) => {
   const [codeDriver, numberDriver, descriptionDriver] =
     formatCodeNumberDescription({ register });
   const imageDriver = formatImage({ register });
@@ -7,7 +7,8 @@ const formatApi = async ({ register, Team }) => {
     let teams = register?.teams.replace(/ /g, "").split(",");
     teamsFilter = await formatTeam({ Team, teams });
   }
-
+  let nationalities = register?.nationality;
+  let nationalyFilter = await formatNationality({ Nationality, nationalities });
   const driverFilter = filterDriver({
     register,
     teamsFilter,
@@ -15,6 +16,7 @@ const formatApi = async ({ register, Team }) => {
     codeDriver,
     descriptionDriver,
     imageDriver,
+    nationalyFilter,
   });
   return driverFilter;
 };
@@ -30,6 +32,15 @@ const formatTeam = async ({ Team, teams }) => {
     teamsFilter.push(dataValues);
   }
   return teamsFilter;
+};
+
+const formatNationality = async ({ Nationality, nationalities }) => {
+  let { dataValues } = await Nationality.findOne({
+    where: {
+      nameNationality: nationalities,
+    },
+  });
+  return dataValues;
 };
 
 const formatCodeNumberDescription = ({ register }) => {
@@ -59,6 +70,7 @@ const filterDriver = ({
   codeDriver,
   descriptionDriver,
   imageDriver,
+  nationalyFilter,
 }) => {
   let driverFilter = {};
   for (const key in register) {
@@ -77,6 +89,9 @@ const filterDriver = ({
         break;
       case "image":
         driverFilter[key] = imageDriver;
+        break;
+      case "nationality":
+        driverFilter[key] = nationalyFilter;
         break;
       default:
         driverFilter[key] = register[key];
