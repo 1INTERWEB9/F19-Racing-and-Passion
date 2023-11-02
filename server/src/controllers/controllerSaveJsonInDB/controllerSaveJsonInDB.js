@@ -1,9 +1,10 @@
 const axios = require("axios");
-const { Driver, Image, Team } = require("../../db");
+const { Driver, Image, Team, Nationality } = require("../../db");
 const { saveDriverInDB } = require("./saveDriverInDB");
 const { saveImageInDB } = require("./saveImageInDB");
 const { saveTeamInDB } = require("./saveTeamInDB");
 const { saveDriverTeamInDB } = require("./saveDriverTeamInDB");
+const { saveNationalityInDB } = require("./saveNationalityInDB");
 
 const createjsonInfo = async () => {
   const { data } = await axios.get(`http://localhost:5000/drivers`);
@@ -14,7 +15,8 @@ const saveJsonInDB = async () => {
   try {
     const jsonInfo = await createjsonInfo();
     await saveTeamInDB({ jsonInfo, Team });
-    await saveDriverInDB({ jsonInfo, Driver });
+    await saveNationalityInDB({ jsonInfo, Nationality });
+    await saveDriverInDB({ jsonInfo, Driver, Nationality });
     await saveImageInDB({ jsonInfo, Driver, Image });
     await saveDriverTeamInDB({ jsonInfo, Driver, Team });
   } catch (error) {
