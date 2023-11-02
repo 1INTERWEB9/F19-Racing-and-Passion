@@ -37,14 +37,14 @@ const readDriver = async ({ condition, id }) => {
   let results = resultsApi;
   if (resultsApi.length < pageSize) results = resultsApi.concat(resultDB);
   if (results.length < 1) throw new Error("Filtro invalido");
-  if (results.length > 1) {
+  else if (results.length > 1) {
     const information = {
       count: count,
       pages: Math.ceil(count / pageSize),
     };
     return { information, data: results };
   } else {
-    return results;
+    return results[0];
   }
 };
 
