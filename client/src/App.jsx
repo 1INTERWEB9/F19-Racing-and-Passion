@@ -6,13 +6,14 @@ import { Route, Routes } from "react-router-dom";
 
 const Cards = lazy(() => import("./components/cards/Cards"));
 const DetailCard = lazy(() => import("./components/detailCard/DetailCard"));
+const Form = lazy(() => import("./components/form/Form"));
 
 function App() {
   return (
     <>
       <Routes>
         <Route
-          path="/"
+          path="/driver"
           element={
             <Suspense>
               <Cards />
@@ -24,6 +25,14 @@ function App() {
           element={
             <Suspense>
               <DetailCard />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/newDriver"
+          element={
+            <Suspense>
+              <Form />
             </Suspense>
           }
         />
