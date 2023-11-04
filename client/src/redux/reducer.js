@@ -5,6 +5,8 @@ import {
   CLEAN_DRIVERS,
   GET_SINGLE_DRIVER,
   ENABLED_WAIT_PAGE,
+  GET_TEAMS,
+  GET_NATIONALITIES,
 } from "./action_types";
 
 const initialState = {
@@ -14,6 +16,8 @@ const initialState = {
   infoAPI: [],
   waitPage: true,
   error: false,
+  teams: [],
+  nationalities: [],
 };
 
 const reducer = (state = initialState, action) => {
@@ -50,6 +54,16 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         waitPage: true,
+      };
+    case GET_TEAMS:
+      return {
+        ...state,
+        teams: action.payload.data,
+      };
+    case GET_NATIONALITIES:
+      return {
+        ...state,
+        nationalities: action.payload.data,
       };
     default:
       return { ...state };
