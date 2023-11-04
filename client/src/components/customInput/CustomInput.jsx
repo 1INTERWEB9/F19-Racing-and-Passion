@@ -8,18 +8,24 @@ const CustomInput = ({
   onChange,
   valuesInput,
 }) => {
+  let min = "1";
   return (
     <>
       {valuesLabel.map((valueLabel, index) => (
-        <div key={htmlFor[index]}>
+        <div
+          key={htmlFor[index]}
+          style={{ height: "130px", marginRight: "auto", marginLeft: "auto" }}
+        >
           <label className={css.custom_label} htmlFor={htmlFor[index]}>
             {valueLabel}:{" "}
           </label>
           <input
+            min={min}
+            max={types[index] == "date" ? "2005-12-31" : null}
             className={css.custom_input}
-            type={types[index]}
+            type={types[index] ? types[index] : "text"}
             name={htmlFor[index]}
-            value={valuesInput[index]}
+            value={valuesInput[htmlFor[index]]}
             onChange={onChange}
           />
           {errors[htmlFor[index]] && (
