@@ -1,10 +1,12 @@
-// const { readTeam } = require("../controllers/controllerTeam/readTeam");
+const {
+  readNationality,
+} = require("../controllers/controllerNationality/readNationality");
 
-const handlerTeam = async (request, response) => {
+const handlerReadNationality = async (request, response) => {
   const id = request.params.id;
   const condition = request.query;
   try {
-    const results = await readTeam({ condition, id });
+    const results = await readNationality({ condition, id });
     response.json(results);
   } catch (error) {
     response.status(400).json({ error: error.message });
@@ -12,5 +14,5 @@ const handlerTeam = async (request, response) => {
 };
 
 module.exports = {
-  handlerTeam,
+  handlerReadNationality,
 };

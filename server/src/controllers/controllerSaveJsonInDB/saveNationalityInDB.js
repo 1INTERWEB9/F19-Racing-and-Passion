@@ -1,12 +1,12 @@
+const {
+  createNationality,
+} = require("../controllerNationality/controllerNationality");
+
 const saveNationalityInDB = async ({ jsonInfo, Nationality }) => {
   let errors = [];
   for (const register of jsonInfo) {
     try {
-      await Nationality.findOrCreate({
-        where: {
-          nameNationality: register?.nationality,
-        },
-      });
+      await createNationality({ register, Nationality });
     } catch (error) {
       errors.push(error.message);
     }
