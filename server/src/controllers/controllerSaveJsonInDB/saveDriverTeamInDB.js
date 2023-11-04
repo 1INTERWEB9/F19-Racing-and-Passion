@@ -1,20 +1,11 @@
+const { addDriverTeam } = require("../controllerTeam/controllerTeam");
+
 const saveDriverTeamInDB = async ({ jsonInfo, Driver, Team }) => {
   let errors = [];
   for (const register of jsonInfo) {
     try {
       if (register?.teams) {
-        let driverFilter = await Driver.findOne({
-          where: { url: register?.url },
-        });
-        let teams = register?.teams.replace(/ /g, "").split(",");
-        for (let index = 0; index < teams.length; index++) {
-          let teamsFilter = await Team.findOne({
-            where: {
-              nameTeam: teams[index],
-            },
-          });
-          driverFilter.addTeam(teamsFilter);
-        }
+        await addDriverTeam({ Team, register, Driver });
       }
     } catch (error) {
       errors.push(error.message);

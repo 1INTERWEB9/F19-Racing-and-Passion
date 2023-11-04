@@ -12,8 +12,12 @@ const createDriver = async ({ Driver, register, Nationality }) => {
   let [driver] = await Driver.findOrCreate({
     where: {
       driverRef: register?.driverRef,
-      forename: register?.name?.forename,
-      surname: register?.name?.surname,
+      forename: register?.name?.forename
+        ? register?.name?.forename
+        : register?.forename,
+      surname: register?.name?.surname
+        ? register?.name?.surname
+        : register?.surname,
       number: numberDriver,
       code: codeDriver,
       dob: register?.dob,
@@ -23,6 +27,7 @@ const createDriver = async ({ Driver, register, Nationality }) => {
     },
   });
   driver.setNationality(nationalityFilter?.id_Nationality);
+  return driver;
 };
 
 module.exports = {

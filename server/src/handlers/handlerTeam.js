@@ -1,6 +1,6 @@
 const { readTeam } = require("../controllers/controllerTeam/readTeam");
 
-const handlerTeam = async (request, response) => {
+const handlerReadTeam = async (request, response) => {
   const id = request.params.id;
   const condition = request.query;
   try {
@@ -12,5 +12,5 @@ const handlerTeam = async (request, response) => {
 };
 
 module.exports = {
-  handlerTeam,
+  handlerReadTeam,
 };
