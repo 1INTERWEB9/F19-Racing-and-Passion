@@ -1,6 +1,14 @@
 /* eslint-disable react/prop-types */
 import { Link } from "react-router-dom";
-const CustomButton = ({ style, onClick, text, link, className, disabled }) => {
+const CustomButton = ({
+  style,
+  onClick,
+  text,
+  link,
+  className,
+  disabled,
+  values,
+}) => {
   return (
     <>
       {!link

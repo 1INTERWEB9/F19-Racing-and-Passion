@@ -68,7 +68,7 @@ const Cards = memo(function Cards() {
         style={{
           display: "flex",
           flexWrap: "wrap",
-          width: "100%",
+          minWidth: "1300px",
           minHeight: "1000px",
         }}
       >
