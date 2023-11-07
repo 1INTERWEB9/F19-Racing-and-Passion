@@ -50,7 +50,7 @@ Image.hasOne(Driver, {
 Team.belongsToMany(Driver, {
   through: { model: "DriverTeams", unique: false },
   foreignKey: {
-    name: "team",
+    name: "Team",
   },
 });
 
