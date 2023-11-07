@@ -1,23 +1,33 @@
 const { queryApi } = require("./queryApi");
 const { queryDB } = require("./queryDB");
+const { sortDriver } = require("./sortDrivers");
 
 const readDriver = async ({ condition, id }) => {
   let filters = {};
   let page = 0;
   let pageSize = 9;
+  let sort;
+  let reverse = false;
   for (const key in condition) {
-    if (key.toLowerCase() != "page" && key.toLowerCase() != "pagesize")
+    if (
+      key.toLowerCase() != "page" &&
+      key.toLowerCase() != "pagesize" &&
+      key.toLowerCase() != "sort" &&
+      key.toLowerCase() != "reverse"
+    )
       filters[key] = condition[key];
     else if (key.toLowerCase() == "page") {
       if (condition[key] >= 1) page = condition[key] - 1;
-    } else {
+    } else if (key.toLowerCase() == "pagesize") {
       if (condition[key] >= 1) pageSize = condition[key];
+    } else if (key.toLowerCase() == "sort") {
+      if (condition[key] != null) sort = condition[key];
+    } else {
+      if (condition[key] != null) reverse = condition[key];
     }
   }
-  const [resultsApi, countApi, pageApi] = await queryApi({
+  const [resultsApi, countApi] = await queryApi({
     filters,
-    page,
-    pageSize,
     id,
   });
   if (id) {
@@ -26,26 +36,21 @@ const readDriver = async ({ condition, id }) => {
 
   const [resultDB, countDB] = await queryDB({
     filters,
-    page,
-    pageSize,
-    pageApi,
-    countApi,
-    resultsApi,
     id,
   });
   const count = countApi + countDB;
-  let results = resultsApi;
-  if (resultsApi.length < pageSize) results = resultsApi.concat(resultDB);
+  let results = resultsApi.concat(resultDB);
+  sortDriver(sort, results, reverse);
   if (results.length < 1) throw new Error("Filtro invalido");
-  else if (results.length > 1) {
-    const information = {
-      count: count,
-      pages: Math.ceil(count / pageSize),
-    };
-    return { information, data: results };
-  } else {
-    return results[0];
-  }
+  results = results.slice(
+    page * pageSize,
+    page * pageSize + Number.parseInt(pageSize)
+  );
+  const information = {
+    count: count,
+    pages: Math.ceil(count / pageSize),
+  };
+  return { information, data: results };
 };
 
 module.exports = {
