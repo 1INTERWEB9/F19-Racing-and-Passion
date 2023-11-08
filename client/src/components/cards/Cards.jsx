@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 import Card from "../card/Card";
@@ -12,6 +13,8 @@ import {
 } from "../../redux/actions";
 import { useState, useEffect, memo } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { AiOutlineArrowRight, AiOutlineArrowLeft } from "react-icons/ai";
+import CustomLoading from "../customLoading/customLoading";
 
 const Cards = memo(function Cards() {
   const drivers = useSelector((state) => state.drivers);
@@ -22,68 +25,86 @@ const Cards = memo(function Cards() {
   const [conditionSearch, setConditionSearch] = useState("");
   const [currentDriversPage, setcurrentDriversPage] = useState(1);
 
+  const rootElement = document.getElementById("root");
+
+  if (rootElement) {
+    rootElement.style.margin = "0 auto";
+    rootElement.style.padding = "2rem";
+    rootElement.style.width = "85%";
+    rootElement.style.height = "auto";
+  }
+
   useEffect(() => {
     dispatch(GetDrivers(currentDriversPage, conditionSearch));
+    return () => {
+      dispatch(EnableWaitPage());
+      dispatch(CleanCharacters());
+    };
   }, [currentDriversPage, conditionSearch]);
 
   const handleIncrementPageAPI = () => {
     if (currentDriversPage < infoAPI.pages) {
       setcurrentDriversPage(currentDriversPage + 1);
-    } else if (currentDriversPage === infoAPI.pages) {
+    } else if (currentDriversPage === infoAPI.pages && infoAPI.pages > 1) {
       setcurrentDriversPage(1);
-    } else {
+    } else if (currentDriversPage != infoAPI.pages) {
       setcurrentDriversPage(2);
     }
-    dispatch(EnableWaitPage());
-    dispatch(CleanCharacters());
   };
   const handleDecrementPageAPI = () => {
     if (currentDriversPage > 1 && currentDriversPage <= infoAPI.pages) {
       setcurrentDriversPage(currentDriversPage - 1);
-    } else {
+    } else if (currentDriversPage != infoAPI.pages) {
       setcurrentDriversPage(infoAPI.pages);
     }
-    dispatch(EnableWaitPage());
-    dispatch(CleanCharacters());
   };
 
   return (
     <>
-      <div className={css["in-view-card"]}>
+      <div
+        style={{
+          backgroundColor: "#faea5c",
+          border: "10px solid #804000",
+          textShadow: "1px 0px 5px #d0d5d3",
+        }}
+      >
         <h1>Catalogo de conductores</h1>
         <h2>Busca los conductores que mas te interesen</h2>
         <ApiSearchBar setConditionSearch={setConditionSearch} />
-        <h2>
-          Te encuentras en la pagina{" "}
-          {currentDriversPage > infoAPI.pages ? 1 : currentDriversPage}
-        </h2>
+        <br />
         <CustomButton
           style={{ margin: 10 }}
-          onClick={[handleDecrementPageAPI, handleIncrementPageAPI]}
-          text={["Anterior página", "Siguiente Página"]}
+          onClick={[handleDecrementPageAPI, () => {}, handleIncrementPageAPI]}
+          text={[
+            <AiOutlineArrowLeft />,
+            `${currentDriversPage} de ${infoAPI.pages}`,
+            <AiOutlineArrowRight />,
+          ]}
           disabled={waitPage}
         />
       </div>
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          minWidth: "1300px",
-          minHeight: "1000px",
-        }}
-      >
+      <br />
+      <div className={css.div}>
         {error ? (
           <h1>No se encuentran conductores que coincidan con la busqueda</h1>
         ) : waitPage ? (
-          <h1>Cargando...</h1>
+          <CustomLoading />
         ) : null}
-        {drivers.map((driver) => (
-          <>
-            <LazyLoadComponent>
-              <Card key={driver.id} props={driver} />
-            </LazyLoadComponent>
-          </>
-        ))}
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+          }}
+        >
+          {drivers?.map((driver) => (
+            <>
+              <LazyLoadComponent>
+                <Card key={driver.id} props={driver} />
+              </LazyLoadComponent>
+            </>
+          ))}
+        </div>
       </div>
     </>
   );
