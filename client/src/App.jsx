@@ -1,17 +1,31 @@
 import { Suspense, lazy } from "react";
 import "./App.css";
-// import Cards from "./components/cards/Cards";
-// import DetailCard from "./components/detailCard/DetailCard";
 import { Route, Routes } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 
 const Cards = lazy(() => import("./components/cards/Cards"));
 const DetailCard = lazy(() => import("./components/detailCard/DetailCard"));
 const Form = lazy(() => import("./components/form/Form"));
+const HomePage = lazy(() => import("./components/homePage/HomePage"));
+const NavBar = lazy(() => import("./components/navBar/NavBar"));
 
 function App() {
   return (
     <>
+      <Suspense>
+        <NavBar />
+      </Suspense>
+
+      <Toaster />
       <Routes>
+        <Route
+          path="/"
+          element={
+            <Suspense>
+              <HomePage />
+            </Suspense>
+          }
+        />
         <Route
           path="/driver"
           element={
