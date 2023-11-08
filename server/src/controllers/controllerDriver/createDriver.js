@@ -3,7 +3,8 @@ const createDriver = async ({ Driver, register, Nationality }) => {
   let numberDriver = null;
   let descriptionDriver = null;
   if (register?.code != "\\N") codeDriver = register?.code;
-  if (Number.isInteger(register?.number)) numberDriver = register?.number;
+  if (typeof (1 - register?.number) == "number")
+    numberDriver = register?.number;
   if (register?.description?.length > 10 && register?.description)
     descriptionDriver = register?.description;
   let nationalityFilter = await Nationality.findOne({
