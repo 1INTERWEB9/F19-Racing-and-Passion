@@ -1,37 +1,41 @@
 .div_tittle {
   border-style: solid;
-  border-color: black;
-  border-radius: 15px;
-  width: 500px;
+  width: 80%;
   margin-left: auto;
   margin-right: auto;
-  color: var(--color-state);
 }
 
 .div_custom {
+  text-shadow: 1px 0px 10px #d0d5d3;
   margin-top: 30px;
   margin-right: auto;
   margin-left: auto;
-  min-width: 820px;
-  max-width: 820px;
-  background: rgb(35, 59, 63);
-  box-shadow: 0px 0px 5px #d0f181;
-  border-radius: 15px;
+  width: 100%;
+  min-height: 30vh;
+  border: 15px solid #804000;
+  background-color: #faea5c;
+  background-size: cover;
+  box-shadow: 0px 0px 10px #fee500;
   line-height: 20px;
 }
 
 .img {
-  margin-left: 20px;
+  margin-top: auto;
   margin-right: 20px;
+  margin-bottom: auto;
+  display: flex;
+  height: 500px;
+  width: 400px;
+  object-fit: cover;
+  object-position: top;
+  border: 10px solid #804000;
+}
+
+.contain {
+  margin-left: 40px;
+  margin-right: 40px;
   margin-bottom: 20px;
-}
-
-p {
-  color: var(--color-state);
-}
-
-h2 {
-  color: var(--color-state);
+  justify-content: center;
 }
 
 .paragraph {
@@ -39,4 +43,17 @@ h2 {
   line-height: 40px;
   margin-right: 15px;
   color: var(--color-state);
+}
+
+.book {
+  align-items: center;
+  background-color: #ece38f;
+  width: 50%;
+  text-align: left;
+  border: 5px solid #804000;
+}
+
+.data {
+  margin-left: 10px;
+  font-size: xx-large;
 }
