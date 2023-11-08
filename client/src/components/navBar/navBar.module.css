@@ -1,0 +1,13 @@
+.div {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: space-between;
+  border-radius: 25px;
+  background-color: hsla(0, 0%, 100%, 0.1);
+  border: 1px solid hsla(0, 0%, 100%, 0.1);
+  position: absolute;
+  top: 12px;
+  width: auto;
+  padding: 0;
+}
