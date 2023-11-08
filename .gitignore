@@ -1,2 +1,5 @@
 .env
 node_modules
+*.yaml
+server/pnpm-lock.yaml
+client/public/videos/This is Formula 1 - F1 intro (BBC remastered).mp4
