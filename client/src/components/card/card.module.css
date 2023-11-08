@@ -11,7 +11,7 @@
 }
 
 .img {
-  box-shadow: 0px 0px 5px black;
+  box-shadow: 0px 0px 5px #804000;
   padding: 0px;
 }
 .img:hover {
@@ -19,17 +19,21 @@
 }
 
 .div_card {
-  background: rgb(35, 59, 63);
-  border-radius: 15px;
+  color: #d0d5d3;
+  background: #804000;
   margin: 10px;
-  min-width: 300px;
-  max-width: 300px;
-  max-height: 410px;
-  box-shadow: 0px 0px 5px #d0f181;
+  margin-top: 30px;
+  margin-bottom: 25px;
+  height: 100%;
+  border: 3px solid #d0d5d3;
+}
+
+.div_card:hover {
+  transform: scale(1.1);
 }
 
 .name {
-  text-shadow: 1px 0px 2px rgb(255, 251, 44);
+  text-shadow: 1px 0px 2px black;
 }
 .name:hover {
   animation: glowName 1s forwards;
@@ -43,12 +47,12 @@
 
 @keyframes glowImg {
   100% {
-    box-shadow: 0px 0px 20px white;
+    box-shadow: 0px 0px 20px #804000;
   }
 }
 
 @keyframes glowName {
   100% {
-    text-shadow: 0px 0px 20px rgb(255, 251, 44);
+    text-shadow: 0px 0px 20px black;
   }
 }
