@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import css from "./card.module.css";
 import { useState, useEffect, memo } from "react";
-import { EnableWaitPage } from "../../redux/actions";
+import { CleanCharacters } from "../../redux/actions";
 import { useSelector, useDispatch } from "react-redux";
 import {
   LazyLoadImage,
@@ -14,17 +14,13 @@ const Card = memo(function Card({ props, favCards }) {
   const dispatch = useDispatch();
   const [isFav, setIsFav] = useState(false);
   const allFavCharacters = useSelector((state) => state.allFavCharacters);
-  const [color, setColor] = useState({});
+
   const colorFav = "#ff355e";
   const colorNoFav = "#fff";
 
   useEffect(() => {
     allFavCharacters?.map((character) => {
       if (character.id === props.id) setIsFav(true);
-    });
-    setColor({
-      "--main-color": !isFav && !favCards ? colorNoFav : colorFav,
-      "--second-color": !isFav && !favCards ? colorFav : colorNoFav,
     });
   }, [isFav]);
 
@@ -38,15 +34,20 @@ const Card = memo(function Card({ props, favCards }) {
 
         <div
           onClick={() => {
-            dispatch(EnableWaitPage());
+            dispatch(CleanCharacters());
           }}
         >
           <Link to={`/driver/${props.id}`}>
             <LazyLoadImage
+              className={css.img}
               alt={props.driverRef}
               effect="blur"
-              style={{ marginBottom: 15 }}
-              height={300}
+              style={{
+                marginBottom: 15,
+                objectFit: "cover",
+                objectPosition: "top",
+              }}
+              height={400}
               width={300}
               src={
                 props?.image?.urlImage
